@@ -1,0 +1,32 @@
+1. We use python-etcd to connect to etcd
+https://github.com/jplana/python-etcd
+
+2. etcd_load scripts contains predefined percentage and key range like following:-
+#Pre-defined keysize distribution in percentage
+pct = [5, 74, 10, 10, 1]
+
+#Key size range
+key_range = [0, 256, 512, 1024, 8192, 204800]
+
+which effectively means create 
+5% keys between 0 - 256 bytes
+74% keys between 256 - 512 bytes 
+and so on
+
+for each pct value, we create one thread. In case above we create 5 threads.
+
+3. Using the python logging module, log the time for each operation in a file. 
+We use logged time to plot the graphs and get stats later.  
+
+4. To run the script 
+Create 1000 keys
+$ ./etcd_load.py  -e localhost -p 2379 -op create -k 1000 -l /tmp/etcd.log
+
+To get/delete/update 10 keys, we do following:-
+$ ./etcd_load.py  -e localhost -p 2379 -op get -k 1000 -u 10  -l /tmp/etcdget.log
+$ ./etcd_load.py  -e localhost -p 2379 -op delete -k 1000 -u 10  -l /tmp/etcddelete.log
+$ ./etcd_load.py  -e localhost -p 2379 -op update -k 1000 -u 10  -l /tmp/etcdupdate.log
+
+5. To plot the graph install matplotlib, pandas
+$ mkdir /tmp/etcd_results
+$ ./etcd_perf_plot.py -l /tmp/etcd.log -op create -o /tmp/etcd_results

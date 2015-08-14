@@ -13,7 +13,7 @@ parser.add_argument('-e', '--etcdhost', action="store", dest="etcdhost")
 parser.add_argument('-p', '--etcdport', action="store", dest="etcdport", type=int)
 parser.add_argument('-op', '--operation', action="store", dest="operation")
 parser.add_argument('-k', '--keycount', action="store", dest="keycount", type=int)
-parser.add_argument('-u', '--update_delete_keycount', action="store", dest="update_delete_keycount", type=int)
+parser.add_argument('-u', '--get_update_delete_keycount', action="store", dest="get_update_delete_keycount", type=int)
 parser.add_argument('-l', '--logfile', action="store", dest="logfile")
 
 results = parser.parse_args()
@@ -26,7 +26,7 @@ operation = results.operation
 #Get total keycount
 keycount = results.keycount
 
-update_delete_keycount = results.update_delete_keycount
+get_update_delete_keycount = results.get_update_delete_keycount
 
 log_file = results.logfile
 
@@ -110,7 +110,7 @@ def create_keys(base, count, r):
 
 
 def get_update_delete_jobs(func):
-    per_thread = update_delete_keycount / threads
+    per_thread = get_update_delete_keycount / threads
     jobs = []
     base = 0
     for i in range(threads):
@@ -127,7 +127,7 @@ if operation == "create":
         start = key_range[i]
         end = key_range[i + 1]
         d[i] = [start, end]
-    print d
+    #print d
 
     #Create one threads for each pct value
     jobs = []
